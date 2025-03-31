@@ -1,0 +1,21 @@
+@echo off
+cd /d "C:\Users\Dell\Desktop\backfill\2022git\2022"
+
+for /L %%D in (0,1,364) do (
+    setlocal enabledelayedexpansion
+    for /f "delims=" %%I in ('powershell -command "(Get-Date '2022-01-01').AddDays(%%D).ToString('yyyy-MM-dd')"') do set "date=%%I"
+    
+    set "filename=!date!.txt"
+    echo Commit on !date! > "!filename!"
+    git add "!filename!"
+    set "commit_time=!date!T12:00:00"
+    set GIT_AUTHOR_DATE=!commit_time!
+    set GIT_COMMITTER_DATE=!commit_time!
+    git commit -m "Backdated commit for !date!"
+    endlocal
+)
+
+..bat end
+
+
+GIT_AUTHOR_DATE="2023-06-15T12:00:00" GIT_COMMITTER_DATE="2023-06-15T12:00:00" git commit -m "Backdated commit"
